@@ -5,6 +5,7 @@ import (
 	"github.com/golang-migrate/migrate"
 	"github.com/golang-migrate/migrate/database/sqlite3"
 	"github.com/golang-migrate/migrate/source/file"
+	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"os"
 )
@@ -20,6 +21,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer db.Close()
 
 	instance, err := sqlite3.WithInstance(db, &sqlite3.Config{})
 	if err != nil {
