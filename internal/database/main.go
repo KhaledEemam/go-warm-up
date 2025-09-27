@@ -15,3 +15,5 @@ func CreateDataBaseModels(db *sql.DB) Models {
 		Events:    EventsModel{DB: db},
 	}
 }
+
+
