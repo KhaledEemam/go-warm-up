@@ -105,3 +105,30 @@ func (m EventsModel) Delete(id int) error {
 	return nil
 
 }
+
+func (m EventsModel) GetByAttendee(id int) ([]Event, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+	query := "SELECT * FROM events WHERE id = $1"
+
+	rows, err := m.DB.QueryContext(ctx, query, id)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, err
+	}
+	var events []Event
+	for rows.Next() {
+		var event Event
+		err := rows.Scan(&event.Id, &event.Name, &event.Location)
+		if err != nil {
+			return nil, err
+		}
+		events = append(events, event)
+
+	}
+
+	return events, nil
+}
